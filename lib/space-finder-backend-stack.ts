@@ -21,12 +21,6 @@ export class SpaceFinderBackendStack extends cdk.Stack {
 
 
 
-    const helloLambda = new lambda.Function(this, 'helloLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
-      code: lambda.Code.fromAsset(join(__dirname, '..', 'services', 'hello')),
-      handler: 'hello.main'
-    })
-
     const helloLambdaNodeJs = new NodejsFunction(this, 'helloLambdaNodeJs', {
       entry: (join(__dirname, '..', 'services', 'node-lambda', 'hello.ts')),
       handler: 'handler'
@@ -34,7 +28,7 @@ export class SpaceFinderBackendStack extends cdk.Stack {
 
 
     // Hello Api lambda integration:
-    const helloLambdaIntegration = new apigw.LambdaIntegration(helloLambda)
+    const helloLambdaIntegration = new apigw.LambdaIntegration(helloLambdaNodeJs)
     const helloLambdaResource = this.api.root.addResource('hello');
     helloLambdaResource.addMethod('GET', helloLambdaIntegration);
   }
