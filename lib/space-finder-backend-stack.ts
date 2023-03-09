@@ -1,5 +1,4 @@
 import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda'
 import * as apigw from '@aws-cdk/aws-apigateway';
 import { GenericTable } from './GenericTable';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';

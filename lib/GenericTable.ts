@@ -1,7 +1,5 @@
 import * as cdk from '@aws-cdk/core';
 import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
-import { type } from 'node:os';
-
 
 
 export class GenericTable {
