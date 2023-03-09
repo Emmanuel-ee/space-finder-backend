@@ -21,7 +21,13 @@ export class SpaceFinderBackendStack extends cdk.Stack {
 
 
 
-    const helloLambda = new lambda.Function(this, 'helloLambda', {
+    const helloLambdaWebpack = new lambda.Function(this, 'helloLambda', {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      code: lambda.Code.fromAsset(join(__dirname, '..', 'build', 'nodeHelloLambda')),
+      handler: 'nodeHelloLambda.handler'
+    })
+
+    const helloLambda = new lambda.Function(this, 'helloLambdaWebpack', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset(join(__dirname, '..', 'services', 'hello')),
       handler: 'hello.main'
