@@ -1,12 +1,18 @@
 import * as cdk from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as apigw from '@aws-cdk/aws-apigateway';
+import { GenericTable } from './GenericTable';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { join } from 'path';
 
 export class SpaceFinderBackendStack extends cdk.Stack {
 
   private api = new apigw.RestApi(this, 'SpaceApi')
+  private spacesTable = new GenericTable(
+    'SpacesTable',
+    'spaceId',
+    this
+)
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
