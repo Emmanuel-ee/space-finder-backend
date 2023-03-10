@@ -6,6 +6,9 @@ GET {{endpoint}}/hello/
 GET {{endpoint}}/spaces?spaceId=b7078635-efd2-4139-b82d-5d7daf72e6b8
 ###
 
+GET {{endpoint}}/spaces?location=Jamaica
+###
+
 POST {{endpoint}}/spaces/
 Content-Type: application/json
 

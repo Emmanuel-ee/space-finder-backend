@@ -10,7 +10,8 @@ export interface TableProps {
     createLambdaPath?: string,
     readLambdaPath?: string,
     updateLambdaPath?: string,
-    deleteLambdaPath?: string
+    deleteLambdaPath?: string,
+    secondaryIndexes?: string[]
 }
 
 export class GenericTable {
@@ -24,24 +25,25 @@ export class GenericTable {
     private updateLambda: NodejsFunction | undefined;
     private deleteLambda: NodejsFunction | undefined;
 
-    
+
     public createLambdaIntegration: LambdaIntegration;
     public readLambdaIntegration: LambdaIntegration;
     public updateLambdaIntegration: LambdaIntegration;
     public deleteLambdaIntegration: LambdaIntegration;
 
-    public constructor(stack: Stack, props: TableProps){
+    public constructor(stack: Stack, props: TableProps) {
         this.stack = stack;
         this.props = props
-        this.initialize();        
+        this.initialize();
     }
 
-    private initialize(){
+    private initialize() {
         this.createTable();
+        this.addSecondaryIndexes();
         this.createLambdas();
         this.grantTableRights();
     }
-    private createTable(){
+    private createTable() {
 
         this.table = new Table(this.stack, this.props.tableName, {
             partitionKey: {
@@ -51,7 +53,20 @@ export class GenericTable {
             tableName: this.props.tableName
         })
     }
-    private createLambdas(){
+    private addSecondaryIndexes() {
+        if (this.props.secondaryIndexes) {
+            for (const secondaryIndex of this.props.secondaryIndexes) {
+                this.table.addGlobalSecondaryIndex({
+                    indexName: secondaryIndex,
+                    partitionKey: {
+                        name: secondaryIndex,
+                        type: AttributeType.STRING
+                    }
+                })
+            }
+        }
+    }
+    private createLambdas() {
         if (this.props.createLambdaPath) {
             this.createLambda = this.createSingleLambda(this.props.createLambdaPath)
             this.createLambdaIntegration = new LambdaIntegration(this.createLambda);
@@ -70,24 +85,24 @@ export class GenericTable {
         }
     }
 
-    private grantTableRights(){
-        if(this.createLambda){
+    private grantTableRights() {
+        if (this.createLambda) {
             this.table.grantWriteData(this.createLambda);
         }
-        if(this.readLambda){
+        if (this.readLambda) {
             this.table.grantReadData(this.readLambda)
         }
-        if(this.updateLambda){
+        if (this.updateLambda) {
             this.table.grantWriteData(this.updateLambda)
         }
-        if(this.deleteLambda){
+        if (this.deleteLambda) {
             this.table.grantWriteData(this.deleteLambda)
         }
     }
 
 
-    private createSingleLambda(lambdaName: string): NodejsFunction{
-        const lambdaId = `${this.props.tableName}-${lambdaName}`  
+    private createSingleLambda(lambdaName: string): NodejsFunction {
+        const lambdaId = `${this.props.tableName}-${lambdaName}`
         return new NodejsFunction(this.stack, lambdaId, {
             entry: (join(__dirname, '..', 'services', this.props.tableName, `${lambdaName}.ts`)),
             handler: 'handler',
