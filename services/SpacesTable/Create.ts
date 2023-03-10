@@ -8,12 +8,17 @@ import { v4 } from 'uuid'
 const docClient = new DynamoDB.DocumentClient();
 
 async function handler(event: APIGatewayProxyEvent, context: Context) {
+    // const item = {
+    //     spaceId: v4(),
+    //     data: 'example data',
+    // }
+
+    const item = typeof event.body == 'object' ? event.body: JSON.parse(event.body);
+    item.spaceId = v4();
+
     const params = {
         TableName: 'SpacesTable',
-        Item: {
-            spaceId: v4(),
-            data: 'example data',
-        },
+        Item: item
     };
 
     const result: APIGatewayProxyResult = {
@@ -29,9 +34,10 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
         }
         console.log(errorMessage)
     };
-    return {
-        result
-    };
+
+    result.body = JSON.stringify(`Created item with id: ${item.spaceId}`)
+    return result
+
 };
 
 export { handler }
