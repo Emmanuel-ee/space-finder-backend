@@ -1,4 +1,15 @@
-@endpoint = https://qg1g2varqk.execute-api.us-east-1.amazonaws.com/prod/
+@endpoint = https://pldlcqqrd8.execute-api.us-east-1.amazonaws.com/prod/
 
 GET {{endpoint}}/hello/
 ###
+
+GET {{endpoint}}/spaces?spacesId=ytbbubvvhg
+###
+
+POST {{endpoint}}/spaces/
+Content-Type: application/json
+
+{
+    "location": "Paris",
+    "name": "Good Holiday Venue"
+}

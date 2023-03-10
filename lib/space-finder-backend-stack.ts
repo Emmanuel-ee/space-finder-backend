@@ -14,11 +14,12 @@ import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 export class SpaceFinderBackendStack extends Stack {
 
   private api = new RestApi(this, 'SpaceApi')
-  
+
   private spacesTable = new GenericTable(this, {
     tableName: 'SpacesTable',
     primaryKey: 'spaceId',
-    createLambdaPath: 'Create'
+    createLambdaPath: 'Create',
+    readLambdaPath: 'Read'
   })
 
 
@@ -41,5 +42,10 @@ export class SpaceFinderBackendStack extends Stack {
     const helloLambdaIntegration = new LambdaIntegration(helloLambdaNodeJs)
     const helloLambdaResource = this.api.root.addResource('hello');
     helloLambdaResource.addMethod('GET', helloLambdaIntegration);
+
+    //Spaces API integrations:
+    const spaceResource = this.api.root.addResource('spaces');
+    spaceResource.addMethod('POST', this.spacesTable.createLambdaIntegration);
+    spaceResource.addMethod('GET', this.spacesTable.readLambdaIntegration)
   }
 }

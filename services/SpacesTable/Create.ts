@@ -5,6 +5,10 @@ import {
 } from "aws-lambda";
 import { v4 } from 'uuid'
 
+
+// const TABLE_NAME = 'SpacesTable'
+const TABLE_NAME = process.env.TABLE_NAME
+
 const docClient = new DynamoDB.DocumentClient();
 
 async function handler(event: APIGatewayProxyEvent, context: Context) {
@@ -17,7 +21,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
     item.spaceId = v4();
 
     const params = {
-        TableName: 'SpacesTable',
+        TableName: TABLE_NAME!,
         Item: item
     };
 
