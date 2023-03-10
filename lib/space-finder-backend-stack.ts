@@ -1,22 +1,28 @@
-import * as cdk from '@aws-cdk/core';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import { GenericTable } from './GenericTable';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
-import {PolicyStatement} from '@aws-cdk/aws-iam'
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
+import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway'
+import { GenericTable } from './GenericTable';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 
 
-export class SpaceFinderBackendStack extends cdk.Stack {
 
-  private api = new apigw.RestApi(this, 'SpaceApi')
-  private spacesTable = new GenericTable(
-    'SpacesTable',
-    'spaceId',
-    this
-  )
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class SpaceFinderBackendStack extends Stack {
+
+  private api = new RestApi(this, 'SpaceApi')
+  
+  private spacesTable = new GenericTable(this, {
+    tableName: 'SpacesTable',
+    primaryKey: 'spaceId',
+    createLambdaPath: 'Create'
+  })
+
+
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
 
@@ -32,7 +38,7 @@ export class SpaceFinderBackendStack extends cdk.Stack {
 
 
     // Hello Api lambda integration:
-    const helloLambdaIntegration = new apigw.LambdaIntegration(helloLambdaNodeJs)
+    const helloLambdaIntegration = new LambdaIntegration(helloLambdaNodeJs)
     const helloLambdaResource = this.api.root.addResource('hello');
     helloLambdaResource.addMethod('GET', helloLambdaIntegration);
   }
