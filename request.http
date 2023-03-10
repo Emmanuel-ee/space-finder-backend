@@ -3,13 +3,14 @@
 GET {{endpoint}}/hello/
 ###
 
-GET {{endpoint}}/spaces?spacesId=ytbbubvvhg
+GET {{endpoint}}/spaces?spaceId=b7078635-efd2-4139-b82d-5d7daf72e6b8
 ###
 
 POST {{endpoint}}/spaces/
 Content-Type: application/json
 
 {
-    "location": "Paris",
-    "name": "Good Holiday Venue"
+    "location": "Jamaica",
+    "name": "City of Ragae"
 }
+###

@@ -1,33 +1,15 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
-import { APIGateway } from 'aws-sdk'
-import { handler } from '../../services/SpacesTable/Read'
-// import { handler} from '../../services/SpacesTable/Create'
-
-
-//uncomment bellow to add items to Dynamodb database
-// const event = {
-//     body: {
-//         location: 'Paris'
-//     }
-// }
-// handler(event as any, {} as any)
-
-
-
-// uncomment below to Read for Dynamodb
-// const result = handler({} as any, {} as any).then((apiResult)=>{
-//     const items = JSON.parse(apiResult.body);
-//     console.log(123)
-// });
-
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { handler } from '../../services/SpacesTable/Read';
 
 
 const event: APIGatewayProxyEvent = {
     queryStringParameters: {
-        spaceId: '74330c02-958c-4e81-af44-5d25f93a193d'
+        spaceId: 'f8e56aa9-8514-4464-94e0-c03b3db8e89c'
     }
 } as any;
-const result = handler({} as any, {} as any).then((apiResult) => {
+
+
+const result = handler(event, {} as any).then((apiResult)=>{
     const items = JSON.parse(apiResult.body);
     console.log(123)
 });
