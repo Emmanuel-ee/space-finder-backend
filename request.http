@@ -1,27 +1,28 @@
 @endpoint = https://pldlcqqrd8.execute-api.us-east-1.amazonaws.com/prod/
 
-GET {{endpoint}}/hello/
-###
-
 GET {{endpoint}}/spaces/
 ###
 
-PUT {{endpoint}}/spaces?spaceId=29191766-7113-447e-b7bf-4175be2ebd11
-Content-Type: application/json
-
-{
-    "location": "Updated Location"
-}
-###
-
-GET {{endpoint}}/spaces?location=Jamaica
+GET {{endpoint}}/spaces?spaceId=188f7c42-d463-4e87-b045-6fcd5f11e869
 ###
 
 POST {{endpoint}}/spaces/
 Content-Type: application/json
 
 {
+    "location": "Nigeria",
+    "name": "Home town"
+}
+###
+
+PUT {{endpoint}}/spaces?spaceId=64c87073-5ffe-4cbd-b867-2645b91fccde
+Content-Type: application/json
+
+{
     "location": "Jamaica",
     "name": "City of Ragae"
 }
+###
+
+DELETE  {{endpoint}}/spaces?spaceId=64c87073-5ffe-4cbd-b867-2645b91fccde
 ###
